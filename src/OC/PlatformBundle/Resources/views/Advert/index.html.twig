@@ -24,4 +24,12 @@
     {% endfor %}
   </ul>
 
+  <ul class="pagination">
+    {% for p in range(1, nbPages) %}
+        <li{% if p == page %} class="active"{% endif %}>
+        <a href="{{ path('oc_platform_home', {'page': p}) }}" title="Page {{ p }}">{{ p }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+
 {% endblock %}

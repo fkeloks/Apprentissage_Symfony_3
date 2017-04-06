@@ -22,10 +22,18 @@ class AdvertController extends Controller
     }
 
     $em = $this->getDoctrine()->getManager();
-    $listAdverts = $em->getRepository('OCPlatformBundle:Advert')->findAll();
+    $listAdverts = $this->getDoctrine()->getManager()->getRepository('OCPlatformBundle:Advert')->getAdverts($page, 5);
+
+    $nbPages = ceil(count($listAdverts) / 5);
+
+    if ($page > $nbPages) {
+      throw $this->createNotFoundException("La page ".$page." n'existe pas.");
+    }
 
     return $this->render('OCPlatformBundle:Advert:index.html.twig', array(
-        'listAdverts' => $listAdverts
+        'listAdverts' => $listAdverts,
+        'nbPages'     => $nbPages,
+        'page'        => $page,
     ));
   }
 
