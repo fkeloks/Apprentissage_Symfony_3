@@ -4,6 +4,9 @@ namespace OC\PlatformBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use OC\PlatformBundle\Validator\Antiflood;
 
 /**
  * Advert
@@ -11,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="advert")
  * @ORM\Entity(repositoryClass="OC\PlatformBundle\Entity\AdvertRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(fields="title", message="Une annonce existe déjà avec ce titre.")
  */
 class Advert
 {
@@ -18,10 +22,12 @@ class Advert
     public function __construct()
     {
         $this->date = new \Datetime();
+        $this->categories   = new ArrayCollection();
     }
 
     /**
-    * @ORM\OneToOne(targetEntity="OC\PlatformBundle\Entity\Image", cascade={"persist"})
+    * @ORM\OneToOne(targetEntity="OC\PlatformBundle\Entity\Image", cascade={"persist", "remove"})
+    * @Assert\Valid()
     */
     private $image;
     
@@ -40,16 +46,23 @@ class Advert
     private $id;
 
     /**
+    * @ORM\Column(name="published", type="boolean")
+    */
+    private $published = true;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetimetz")
+     * @Assert\DateTime()
      */
     private $date;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(name="title", type="string", length=255, unique=true)
+     * @Assert\Length(min=5, minMessage="Votre titre doit contenir au moins {{ limit }} charactères.")
      */
     private $title;
 
@@ -57,6 +70,8 @@ class Advert
      * @var string
      *
      * @ORM\Column(name="author", type="string", length=255)
+     * @Assert\Length(min=2, minMessage="Le nom de l'auteur doit contenir au moins {{ limit }} charactères.")
+     * @Antiflood()
      */
     private $author;
 
@@ -64,6 +79,7 @@ class Advert
      * @var string
      *
      * @ORM\Column(name="content", type="text")
+     * @Assert\Length(min=15, minMessage="Le contenu de l'annonce doit contenir au moins {{ limit }} charactères.")
      */
     private $content;
 
@@ -267,5 +283,29 @@ class Advert
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Set published
+     *
+     * @param boolean $published
+     *
+     * @return Advert
+     */
+    public function setPublished($published)
+    {
+        $this->published = $published;
+
+        return $this;
+    }
+
+    /**
+     * Get published
+     *
+     * @return boolean
+     */
+    public function getPublished()
+    {
+        return $this->published;
     }
 }

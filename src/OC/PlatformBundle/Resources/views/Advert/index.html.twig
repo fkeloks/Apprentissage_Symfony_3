@@ -18,6 +18,7 @@
         </a>
         par {{ advert.author }},
         le {{ advert.date|date('d/m/Y') }}
+        <small>{ Annonce publiée : {% if advert.published %} Oui {% else %} Non {% endif %}}</small>
       </li>
     {% else %}
       <li>Pas encore d'annonces</li>
