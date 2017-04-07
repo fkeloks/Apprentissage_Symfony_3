@@ -15,23 +15,29 @@ Pour ne pas qu'on se partage tous nos mots de passe, le fichier app/config/param
 
 Avec Composer, lancer la commande :
 
+```
 php composer.phar install
+```
 
 ## 3. Créer la base de données
 
 Lancer les commandes :
 
+```
 php bin/console doctrine:database:create
 
 php bin/console doctrine:schema:update --dump-sql
 php bin/console doctrine:schema:update --force
 
 php bin/console doctrine:fixtures:load
+```
 
 ## 4. Publier les assets
 
 Publiez les assets dans le répertoire web :
 
+```
 php bin/console assets:install web
+```
 
-Tout est good !
+## 5. Tout est good !
