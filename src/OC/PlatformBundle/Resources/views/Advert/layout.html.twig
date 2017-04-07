@@ -13,7 +13,7 @@
     
 
     {# On définit un sous-titre commun à toutes les pages du bundle, par exemple #}
-    <h1>Annonces :</h1>
+    <h1>Bonjour {% if app.user is not null %}{{ app.user.username }}{% endif %} | Annonces :</h1>
 
     <hr>
 

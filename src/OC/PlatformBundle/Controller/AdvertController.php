@@ -7,6 +7,7 @@ namespace OC\PlatformBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use OC\PlatformBundle\Entity\Advert;
 use OC\PlatformBundle\Entity\Image;
 use OC\PlatformBundle\Entity\Application;
@@ -62,6 +63,10 @@ class AdvertController extends Controller
 
   public function addAction(Request $request)
   {
+    if (!$this->get('security.authorization_checker')->isGranted('ROLE_AUTEUR')) {
+        throw new AccessDeniedException('Accès limité aux auteurs.');
+    }
+
     $advert = new Advert();
     $form = $this->createForm(AdvertType::class, $advert);
 
