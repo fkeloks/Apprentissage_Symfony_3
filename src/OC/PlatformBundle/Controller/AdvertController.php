@@ -6,6 +6,7 @@ namespace OC\PlatformBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use OC\PlatformBundle\Entity\Advert;
@@ -39,14 +40,18 @@ class AdvertController extends Controller
     ));
   }
 
-  public function viewAction($id)
+  public function homeAction() {
+      return new Response('Page home');
+  }
+
+  public function viewAction(Advert $advert, $id)
   {
     $em = $this->getDoctrine()->getManager();
-    $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
+    /*$advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
 
     if($advert === null) {
         throw new NotFoundHttpException('Page ' . $id . ' inexistante.');
-    }
+    }*/
 
     $listApplications = $em->getRepository('OCPlatformBundle:Application')->findBy(['advert' => $advert]);
 
@@ -165,6 +170,13 @@ class AdvertController extends Controller
 
     return $this->render('OCPlatformBundle:Advert:menu.html.twig', array(
       'listAdverts' => array_reverse($listAdverts)
+    ));
+  }
+
+  public function translationAction($name)
+  {
+    return $this->render('OCPlatformBundle:Advert:translation.html.twig', array(
+      'name' => $name
     ));
   }
 

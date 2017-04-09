@@ -1,6 +1,13 @@
+app_home:
+    path: /
+    defaults:
+        _controller: OCPlatformBundle:Advert:home
+        
 oc_platform:
     resource: "@OCPlatformBundle/Resources/config/routing.yml"
-    prefix:   /platform
+    prefix:   /{_locale}/platform
+    requirements:
+      _locale: fr|de
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
